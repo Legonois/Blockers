@@ -33,7 +33,7 @@ public class LevelController : MonoBehaviour
         targetRot = Quaternion.Euler(-joyconRot.eulerAngles.y, joyconRot.eulerAngles.z, joyconRot.eulerAngles.x + 180f);
 
         transform.rotation.ToAngleAxis(out float angle, out Vector3 axis);
-        Quaternion lerpRot = Quaternion.Lerp(rb.rotation, targetRot, rotationCurve.Evaluate(angle / 90f));
+        Quaternion lerpRot = Quaternion.Lerp(rb.rotation, targetRot, rotationCurve.Evaluate(angle / 90f) * Time.timeScale);
         rb.MoveRotation(lerpRot);
     }
 }
