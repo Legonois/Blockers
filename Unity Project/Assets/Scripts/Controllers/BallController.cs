@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class BallController : MonoBehaviour
 {
+    [SerializeField] LevelManager levelManager;
     [SerializeField] int hazardLayer = 6;
     [HideInInspector] public Rigidbody rb;
 
@@ -15,9 +16,9 @@ public class BallController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == hazardLayer)
+        if (collision.collider.gameObject.layer == hazardLayer)
         {
-            GameManager.Instance.EndGame();
+            levelManager.LevelFailed();
         }
     }
 }
