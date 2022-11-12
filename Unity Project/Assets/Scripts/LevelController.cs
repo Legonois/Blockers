@@ -5,25 +5,35 @@ using UnityEngine;
 public class LevelController : MonoBehaviour
 {
     [SerializeField] AnimationCurve rotationCurve;
-    [SerializeField, Range(0, 1f)] float lerpSpeed;
+    Joycon joycon;
     Quaternion targetRot;
+    Rigidbody rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     private void Start()
     {
-        
+        joycon = JoyconManager.Instance.j[0];
     }
 
     private void Update()
     {
-        Joycon joycon = JoyconManager.Instance.j[0];
         if (joycon.GetButtonDown(Joycon.Button.SHOULDER_2))
         {
             joycon.Recenter();
         }
-        Quaternion joyconRot = joycon.GetVector();
-        targetRot = Quaternion.Euler(-joyconRot.eulerAngles.y, joyconRot.eulerAngles.z, joyconRot.eulerAngles.x);
+    }
 
-        float lerp = rotationCurve.Evaluate(Mathf.Abs(transform.eulerAngles.x) / 90f);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, lerpSpeed);
+    private void FixedUpdate()
+    { 
+        Quaternion joyconRot = joycon.GetVector();
+        targetRot = Quaternion.Euler(-joyconRot.eulerAngles.y, joyconRot.eulerAngles.z, joyconRot.eulerAngles.x + 180f);
+
+        transform.rotation.ToAngleAxis(out float angle, out Vector3 axis);
+        Quaternion lerpRot = Quaternion.Lerp(rb.rotation, targetRot, rotationCurve.Evaluate(angle / 90f));
+        rb.MoveRotation(lerpRot);
     }
 }
