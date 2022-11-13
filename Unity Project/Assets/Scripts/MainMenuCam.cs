@@ -5,17 +5,11 @@ using Cinemachine;
 
 public class MainMenuCam : MonoBehaviour
 {
-    [SerializeField] CinemachineVirtualCamera virtualCamera;
-    [SerializeField] float orbitSpeed;
-    CinemachineTrackedDolly trackedDolly;
+    [SerializeField] float rotateSpeed;
+    [SerializeField] Transform levelPos;
 
-    private void Awake()
+    private void Update()
     {
-        trackedDolly = virtualCamera.GetCinemachineComponent<CinemachineTrackedDolly>();
-    }
-
-    void Update()
-    {
-        trackedDolly.m_PathPosition += orbitSpeed * Time.deltaTime;
+        levelPos.rotation = Quaternion.Euler(0, levelPos.rotation.eulerAngles.y + rotateSpeed * Time.deltaTime, 0);
     }
 }
