@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
+    [SerializeField] AudioClip deathClip;
+    [SerializeField] AudioClip winClip;
+    public AudioSource audioSource;
     public GameObject winScreen;
     public GameObject loseScreen;
 
@@ -16,18 +19,21 @@ public class LevelManager : MonoBehaviour
     public void GoalReached()
     {
         winScreen.SetActive(true);
+        audioSource.PlayOneShot(winClip);
         Time.timeScale = 0;
     }
 
     public void LevelFailed()
     {
         loseScreen.SetActive(true);
+        audioSource.PlayOneShot(deathClip);
         Time.timeScale = 0;
     }
 
     public void NextLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        if (SceneManager.GetActiveScene().buildIndex + 1 <= SceneManager.sceneCount - 1) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        else SceneManager.LoadScene(1);
     }
 
     public void RetryLevel()
